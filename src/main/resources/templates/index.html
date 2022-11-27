@@ -7,7 +7,7 @@
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous"/>
 
     <!-- for no internet connectivity-->
-    <link th:href="@{/style/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/style/bootstrap.min.css}" href="/style/bootstrap.min.css" rel="stylesheet"/>
 
 </head>
 <body>
@@ -16,13 +16,24 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 mx-auto">
-                <h2>Upload File Example</h2>
+                <h2>Upload and Download File</h2>
                 <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
                 <form method="post" th:action="@{/upload}" enctype="multipart/form-data">
                     <div class="form-group mb-4">
                         <input type="file" name="file" class="form-control-file">
                     </div>
                     <button type="submit" class="btn btn-primary">Upload File</button>
+
+                    <p th:if="${message ne null}" th:text="'Download your parsed file by clicking the link below'"></p>
+                    <p th:if="${message ne null}" class="">
+                        <a class="alert alert-primary" th:href="@{|/api/file?fileName=${fileName}|}">Download - <span
+                                th:text="${fileName}"></span></a>
+                    </p>
+
+                    <!--
+                    <a class="alert alert-primary" th:href="@{|/download?name=${fileName}|}">Download - <span
+                            th:text="${fileName}"></span></a>
+                            -->
                 </form>
             </div>
         </div>
