@@ -4,19 +4,20 @@ package com.vicego.subsidianAssessment.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.*;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/file")
@@ -43,7 +44,6 @@ public class FileRestController {
             }
 
             response.setContentType(mimeType);
-
             /**
              * In a regular HTTP response, the Content-Disposition response header is a
              * header indicating if the content is expected to be displayed inline in the
@@ -65,15 +65,31 @@ public class FileRestController {
             InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
 
             FileCopyUtils.copy(inputStream, response.getOutputStream());
-
+            parseFile(new BufferedInputStream(new FileInputStream(file)));
         } else {
 
             System.out.println("file does not exist");
         }
     }
 
+    public void parseFile(InputStream fis) throws IOException {
 
-    @ResponseBody
+        try (InputStreamReader isr = new InputStreamReader(fis,
+                StandardCharsets.UTF_8);
+             BufferedReader br = new BufferedReader(isr)) {
+
+            //br.lines().forEach(line -> System.out.println(line));
+            List<String> data = br.lines()
+                    .flatMap(line -> Arrays.stream(line.split("\\s+")))
+                    .map(String::toLowerCase).sorted()
+                    .collect(Collectors.toList());
+
+            System.out.println("data: " + data);
+
+        }
+    }
+
+ /*   @ResponseBody
     //@GetMapping
     public ResponseEntity<?> downloadFile(@RequestParam(value = "filePath") String filePath) {
         String baseUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -81,13 +97,13 @@ public class FileRestController {
         //return new FileSystemResource(new File("uploads/HTML Elements.pdf"));
         //Path path = Paths.get(baseUri + "/" + filePath);
         Resource resource = null;
-        /*try {
+        *//*try {
             //  resource = new UrlResource(path.toUri());
             resource = new UrlResource(baseUri + "/" + filePath);
             resource = new FileSystemResource(baseUri + "/" + filePath);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }*/
+        }*//*
         resource = new FileSystemResource(filePath);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(MediaType.MULTIPART_FORM_DATA_VALUE))
@@ -95,5 +111,5 @@ public class FileRestController {
                 .body(resource);
         //return new FileSystemResource(new File(baseUri + filePath));
 
-    }
+    }*/
 }
