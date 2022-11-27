@@ -24,8 +24,8 @@ import java.nio.file.StandardCopyOption;
 public class HomeController {
 
     //private final String UPLOAD_DIR = "src/main/resources/static/uploads/";
-    @Value("{upload-dir}")
-    private final String UPLOAD_DIR = "src/main/resources/static/uploads/";
+    @Value("${upload-dir}")
+    private String UPLOAD_DIR;
     private final RestTemplate restTemplate;
 
     public HomeController(RestTemplateBuilder restTemplateBuilder) {

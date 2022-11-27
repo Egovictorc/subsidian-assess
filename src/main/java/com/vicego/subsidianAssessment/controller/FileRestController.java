@@ -21,8 +21,8 @@ import java.net.URLConnection;
 @RestController
 @RequestMapping("api/file")
 public class FileRestController {
-    @Value("{upload-dir}")
-    private final String UPLOAD_DIR = "src/main/resources/static/uploads/";
+    @Value("${upload-dir}")
+    private String UPLOAD_DIR;
 
     public String uploadFile(MultipartFile file) {
         return null;
