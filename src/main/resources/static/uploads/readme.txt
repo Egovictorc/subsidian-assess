@@ -1,3 +1,24 @@
-My Bonnie lies over the ocean.
-This text is placed on the left side of the page 
-This text is centered on the page
+bonnie
+centered
+is
+is
+left
+lies
+my
+ocean.
+of
+on
+on
+over
+page
+page
+placed
+side
+text
+text
+the
+the
+the
+the
+this
+this
